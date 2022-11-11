@@ -1,4 +1,5 @@
-bucket_name     = "gaz-example-buck"
-sftp_servername = "dixo-sftp"
-ssh_pub_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVHJt41JOVpSZZNzWv/8QykLDKD6EpXScHjWszmypjJzSfFggB1FcxIsk5i9wT7O3YvVPWL/6EIQtlxw8B38qrHlLiJn7FbryLH/XgT9YOWOVxf/fypLxBJG5C5x51M4Lj2nBMByQ6YVjQhLbxxPe4JzDxzwFZn7pEkSWq80c0eIxO5+2vRfJGfA3RMa2XrEfBF3Wdlh7uLagTaEXw1nDIwQEnKTnapGtGdADfG0CQBk1PLYofAg7xtjpnNb8dmLhlI8OkWHZD4tvSNnvC+FBGnm8lwzEZGdWC0hSiJ5qp5vHE1BIiuoDXbmKP3Wm80D283W9QiypcVMngL2rki3CtReVvcGPghOfOxkivvUQnRvp1nXVH0Jys9/X1GPeF9/oREsQ+NgqRxvVrj9G+jEO9zW6OZQz/MUIA4Ur+bRHRmgZAb+/V5VUWOo+kk98hVEWGs4BufqkJaVa/LenvbP3DbqI6HDikOLRFdLqdJlpTIZpdctSIsitDe+yEI2jtB00= algazali@SysAdmins-MBP"
-sftp_username   = "gazali"
+bucket_name        = "gazali-sftp-bucket1"
+sftp_servername    = "sftp"
+region             = "us-east-1"
+sftp_users         = { "gazali" = "gazali" }
+sftp_users_ssh_key = { "gazali" = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDDXmWHKBAym4GpNyYcoWgupF0+hWgbzn6rMhQQgcBAGAg4PMbWzo2EfC/TR3OHrWoYy5Du8N8bML8DOlTD3iCw8tTOR175Gp/yiAcpZ7ccyRmuho6Zm0IPcYnErDi7YML65SmrBGi060mCT5g3yyM/hPmYTcTWsMjfKKUVOpz25/NWnFLgCuF2UZXYpAbnDKwKtT3TZEE8KdLih+PuaXLNRKDOf8xmEzKTPB4akaeK3Smz+kcsCGYTSwn5YPv4rbslTKoO1OOcwcyb/Y/Q1UiFel+h7D8xjoNfxrV0MNKwSbvHaHVHvbxPreCPC36L2W7YUw05v1WYdDJueN3pXmkZRcVrzh+/VgF2du6khB+6DFPkLyyVsV53VwAgG+v8BPLNuVANBmCmg53OgZ7j5ZnneULGQYDIVmaScBSw1RakDOMfGH/XjL1GBLVcYatUALpi2B9LNSjUi9WylsSt1GUQ7e5jlkY7PAOu4jUFptfEimCK/L1t/NhBxQr7SqXV3t0= gazali@TechOpss-MBP" }

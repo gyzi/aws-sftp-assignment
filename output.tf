@@ -1,3 +1,3 @@
 output "endpoint" {
-  value = aws_transfer_server.example.endpoint
+  value = module.sftp.endpoint
 }

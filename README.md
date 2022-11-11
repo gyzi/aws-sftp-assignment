@@ -17,19 +17,36 @@ This terraform module will deploy the following services:
     - Bucket
     - Role Policy
 
-## Thoughts on the soluatio ?
+## Thoughts on the soluation ?
 - Using aws serviceless service
-    - 
+    - AWS transfer AWS native sftp service, integrate well with s3/lambda
+    - Lambda cost effective and agile
+    - S3 Bucket scalable, Durability many features
 - Using Terraform 
+    - easy to automate and maintain setup state 
+    - principles Infrastructure as a Code 
+- security/zero-trust
+    - encryption at rest within bucket "s3 encryption"
+    - encryption in transit between native aws service
+    - sftp use public key encryption
+    - least privilege deployment with IAM roles/policys
 - flow overview 
+![Alt overview](misc/flow-overview.png)
 
 
-# Usage Instructions
-## Example
-```terraform
-module "sftp" {
-  source = "github.com/gyzi/aws-sftp-ssignment.git"
-}
+
+## Usage Instructions
+- Add/Update inputs entries, 
+- Then validate, plan and apply resources
+```
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+- To destroy note default bucket_on_destroy value is true
+```
+terraform destroy
 ```
 
 ## Requirements
@@ -44,8 +61,9 @@ module "sftp" {
 |------|---------|
 | bucket_name | name for s3 bucket used as sftp directory |
 | sftp_servername | sftp server name |
-| ssh_pub_key | ssh public key |
-| sftp_username | sftp username |
+| sftp_users | sftp username |
+| sftp_users_ssh_key | ssh public keys for users |
+| lambda_location | lambda function location zip file |
 
 ## Outputs
 

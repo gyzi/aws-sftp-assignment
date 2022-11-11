@@ -3,16 +3,14 @@ variable "bucket_name" {
   type        = string
   description = "s3 bucket name"
 }
-
-variable "region" {
-  type        = string
-  description = "region"
-}
-
 variable "bucket_on_destroy" {
   type        = string
   default     = true
   description = "s3 bucket name"
+}
+variable "lambda_location" {
+  type        = string
+  description = "lambda zip file location"
 }
 
 variable "sftp_servername" {
