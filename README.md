@@ -12,27 +12,29 @@ This terraform module will deploy the following services:
     - Iam to assume s3 bucket
 - [x] Lambda
     - Function
-    - Iam s3 & cloudwatch access
+    - Iam s3 & dynamodb cloudwatch access
 - [x] S3 Bucket
     - Bucket
-    - Role Policy
+- [x] DynamoDB Table
+    - store content for textfiles
 
 ## Thoughts on the soluation ?
 - Using aws serviceless service
-    - AWS transfer AWS native sftp service, integrate well with s3/lambda
+    - AWS transfer AWS native sftp service, integrate well with s3/lambda/dynamodb
     - Lambda cost effective and agile
     - S3 Bucket scalable, Durability many features
 - Using Terraform 
     - easy to automate and maintain setup state 
     - principles Infrastructure as a Code 
 - security/zero-trust
-    - encryption at rest within bucket "s3 encryption"
+    - encryption at rest within bucket, table
     - encryption in transit between native aws service
     - sftp use public key encryption
     - least privilege deployment with IAM roles/policys
 - flow overview 
-![Alt overview](misc/flow-overview.png)
-
+---
+![Alt overview](lambda/flow-overview.png)
+---
 
 
 ## Usage Instructions
@@ -48,7 +50,7 @@ terraform apply -auto-approve
 ```
 terraform destroy
 ```
-
+- use pub/priv keys in misc folder to access sftp, note user is testuser
 ## Requirements
 | Name | Version |
 |------|---------|
@@ -60,16 +62,15 @@ terraform destroy
 | Name | info |
 |------|---------|
 | bucket_name | name for s3 bucket used as sftp directory |
-| sftp_servername | sftp server name |
-| sftp_users | sftp username |
-| sftp_users_ssh_key | ssh public keys for users |
+| sftp_servername | name sftp server used as prefix for creating resources |
+| sftp_users_ssh_key | user:key defines users with their public keys for access |
 | lambda_location | lambda function location zip file |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| arn | ARN of transfer server |
-| id | ID of transfer server |
-| endpoint | Endpoint of transfer server |
+| lambda_function | lambda function name |
+| dynamodb_table | dynamodb table name |
+| sftp_endpoint | Endpoint to connect sftp transfer server |
 

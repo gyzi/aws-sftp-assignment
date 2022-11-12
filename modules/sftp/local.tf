@@ -1,30 +1,39 @@
 locals {
+
+  #Allow Put to s3 only textfiles
   s3_policy  = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AllowListingOfUserFolder",
+      "Sid": "AllowListing",
       "Action": [
         "s3:ListBucket",
         "s3:GetBucketLocation"
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:s3:::${aws_s3_bucket.sftp_bucket.arn}"
+        "${aws_s3_bucket.sftp_bucket.arn}"
       ]
     },
     {
-      "Sid": "HomeDirObjectAccess",
+      "Sid": "ListObjectAccess",
       "Effect": "Allow",
       "Action": [
-        "s3:PutObject",
         "s3:GetObject",
         "s3:DeleteObjectVersion",
         "s3:DeleteObject",
         "s3:GetObjectVersion"
       ],
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.sftp_bucket.arn}/*"
+      "Resource": "${aws_s3_bucket.sftp_bucket.arn}/*"
+    },
+    {
+      "Sid": "AllowPutTextFileOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": "${aws_s3_bucket.sftp_bucket.arn}/*.txt"
     }
   ]
 }
@@ -35,7 +44,7 @@ POLICY
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AllowAccessLambda",
+            "Sid": "AllowLogging",
             "Effect": "Allow",
             "Action": [
                 "logs:CreateLogStream",
@@ -43,7 +52,7 @@ POLICY
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
             ],
-            "Resource": "*"
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/transfer/*"
         }
     ]
 }
@@ -78,5 +87,29 @@ EOF
     ]
 }
 EOF
+
+    dynamodb_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ReadWriteTable",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:BatchGetItem",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "logs:CreateLogGroup"
+            ],
+            "Resource": "${aws_dynamodb_table.sftp_data.arn}"
+        }
+    ]
+} 
+EOF
+
 
 }

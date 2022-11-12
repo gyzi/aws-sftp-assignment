@@ -15,16 +15,23 @@ resource "aws_iam_role" "lambda_s3_role" {
   name               = "${var.sftp_servername}-lambda-s3-role"
   assume_role_policy = local.lambda_assume_role
 }
-# Lambda Policy to intract with cloudwatch and s3 API 
+# Lambda Policy to intract with cloudwatch API 
 resource "aws_iam_role_policy" "lambda_s3_policy" {
   name   = "${var.sftp_servername}-lambda-s3-policy"
   role   = aws_iam_role.lambda_s3_role.id
   policy = local.s3_policy
 }
+# Lambda Policy to intract with s3 API
 resource "aws_iam_role_policy" "lambda_logging_policy" {
   name   = "${var.sftp_servername}-lambda-logging-policy"
   role   = aws_iam_role.lambda_s3_role.id
   policy = local.cloudwatch_policy
+}
+# Lambda Policy to intract with DynamoDB API
+resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
+  name   = "${var.sftp_servername}-lambda-dynamodb-policy"
+  role   = aws_iam_role.lambda_s3_role.id
+  policy = local.dynamodb_policy
 }
 
 

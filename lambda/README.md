@@ -1,11 +1,15 @@
 # aws-sftp-ssignment
-Lambda function to transmited uploaded text files in sftp-server to ony first 20 charcture  
+Lambda function to extract content "20 char only" from uploaded text files in sftp-server and then store content to dynamodb
 
 
-## Usage Instructions
-- upload file to sftp server
-- check cloudwatch lambda_function log-group
-- check text file after been transformed 
+## Function logic and flow
+- From SFTP Transfer event get info
+    - bucket_name
+    - key which is textfiles "IAM only allow .txt"
+    - sftp serverID which will be used as dynamodb table name
+- Extract textfiles content read 20 character only
+- Store extracted content and filename to dynamodb table
+- Delete textfiles from s3 bucket 
 
 ## Requirements
 | Name | info |
@@ -17,8 +21,8 @@ Lambda function to transmited uploaded text files in sftp-server to ony first 20
 | bucket_name | directory/bucket name value received/retrieved from transfer workflow event |
 
 
-## Outputs
+## DynamoDB Table Outputs
 
-| Name | Description |
-|------|-------------|
-| transformed_object | text file with 20 char only |
+| FileTag | FileName | FileContent | 
+|------|-------------|-------------|
+| a4b11ec63392d689fa1fd58676dddf3a | textfilename | extracted content 20|

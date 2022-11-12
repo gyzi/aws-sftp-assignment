@@ -1,7 +1,7 @@
 
 variable "bucket_name" {
   type        = string
-  description = "s3 bucket name"
+  description = "s3 bucket"
 }
 
 variable "region" {
@@ -20,17 +20,6 @@ variable "sftp_servername" {
   description = "sftp server name"
 }
 
-variable "sftp_users" {
-  type        = map(string)
-  default     = {}
-  description = <<-EOT
-    Map of users with key as username and value as their home directory. Home directory is the S3 bucket path which user should have access to
-    ```{
-      user = home_dir_path
-    }```
-  EOT
-}
-
 variable "sftp_users_ssh_key" {
   type        = map(string)
   default     = {}
@@ -42,8 +31,3 @@ variable "sftp_users_ssh_key" {
   EOT
 }
 
-variable "tags" {
-  type        = map(string)
-  default     = {}
-  description = "A map of key value pair to assign to resources"
-}

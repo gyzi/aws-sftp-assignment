@@ -3,7 +3,7 @@
 resource "aws_iam_role" "transfer_logging_s3" {
   name = "${var.sftp_servername}-transfer-logging"
 
-  assume_role_policy = local.lambda_assume_role
+  assume_role_policy = local.transfer_assume_role
 }
 # Iam policy for Transfer for cloudwatch logging 
 resource "aws_iam_role_policy" "transfer_logging" {

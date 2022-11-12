@@ -49,7 +49,7 @@ resource "aws_transfer_workflow" "workflow" {
 
 # Add Users and directory access to s3 Buckett
 resource "aws_transfer_user" "this" {
-  for_each       = var.sftp_users
+  for_each       = var.sftp_users_ssh_key
   server_id      = aws_transfer_server.sftp_server.id
   user_name      = each.key
   role           = aws_iam_role.user.arn
