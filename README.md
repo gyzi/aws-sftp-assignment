@@ -1,15 +1,14 @@
 # aws-sftp-ssignment
-Assignment to create sftp server and text file manipulation  in aws using terrraform 
+Assignment to create sftp server and extract and store content of textfiles in aws using terrraform
 
-[[_TOC_]]
 
 This terraform module will deploy the following services:
 
 - [x] Transfer "SFTP" family
     - sftp with s3 directory
     - workflow - lambda 
-    - Iam to assume lambda
-    - Iam to assume s3 bucket
+    - Iam to invoke lambda
+    - Iam to access s3 bucket
 - [x] Lambda
     - Function
     - Iam s3 & dynamodb cloudwatch access
