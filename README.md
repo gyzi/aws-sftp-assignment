@@ -4,10 +4,8 @@ Assignment to create sftp server and extract and store content of textfiles in a
 
 This terraform module will deploy the following services:
 
-- [x] Transfer "SFTP" family
-    - sftp with s3 directory
-    - workflow - lambda 
-    - Iam to invoke lambda
+- [x] EC2 Instance
+    - Access ssh/scp use directory as sftp
     - Iam to access s3 bucket
 - [x] Lambda
     - Function
@@ -18,10 +16,10 @@ This terraform module will deploy the following services:
     - store content for textfiles
 
 ## Thoughts on the soluation ?
-- Using aws serviceless service
-    - AWS transfer AWS native sftp service, integrate well with s3/lambda/dynamodb
-    - Lambda cost effective and agile
-    - S3 Bucket scalable, Durability many features
+- Using SFTP EC2 and connect with serviceless service
+    - Using EC2 as Sftp Server cost effective
+    - Lambda and agile
+    - S3 Bucket scalable, Durability many more
 - Using Terraform 
     - easy to automate and maintain setup state 
     - principles Infrastructure as a Code 
@@ -30,12 +28,14 @@ This terraform module will deploy the following services:
     - encryption in transit between native aws service
     - sftp use public key encryption
     - least privilege deployment with IAM roles/policys
-- flow overview 
 ---
-![Alt overview](lambda/flow-overview.png)
----
-
-
+## Connecting to sftp
+- Use ubuntu username and private key 
+- To access via public ip as bellow 
+'''' 
+sftp -i ~/.ssh/id_rsa ubuntu@public_ip
+ls Bucketname 
+'''
 ## Usage Instructions
 - Add/Update inputs entries, 
 - Then validate, plan and apply resources
@@ -61,8 +61,12 @@ terraform destroy
 | Name | info |
 |------|---------|
 | bucket_name | name for s3 bucket used as sftp directory |
-| sftp_servername | name sftp server used as prefix for creating resources |
-| sftp_users_ssh_key | user:key defines users with their public keys for access |
+| private_key_path | location for private_key_path  |
+| instance_ami | select ami id in specifed region - ubuntu 22.04 |
+| instance_type | its set t2.micro freetier |
+| key_pair_name | keypair name for accessing sftp |
+| s3_access_key | s3_access_key for s32fs mount s3 to EC2 |
+| s3_secret_key | s3_secret_key for s32fs mount s3 to EC2 |
 | lambda_location | lambda function location zip file |
 
 ## Outputs
@@ -71,5 +75,5 @@ terraform destroy
 |------|-------------|
 | lambda_function | lambda function name |
 | dynamodb_table | dynamodb table name |
-| sftp_endpoint | Endpoint to connect sftp transfer server |
+| public_ip | ip addr for ec2 ssftp to access s3 directory |
 

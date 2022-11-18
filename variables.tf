@@ -1,33 +1,43 @@
 
 variable "bucket_name" {
   type        = string
-  description = "s3 bucket"
+  description = "s3 bucket name"
 }
-
 variable "region" {
   type        = string
   description = "region"
 }
-
 variable "bucket_on_destroy" {
   type        = string
   default     = true
   description = "s3 bucket name"
 }
-
-variable "sftp_servername" {
+variable "lambda_location" {
   type        = string
-  description = "sftp server name"
+  description = "lambda zip file location"
 }
 
-variable "sftp_users_ssh_key" {
-  type        = map(string)
-  default     = {}
-  description = <<-EOT
-    Map of users with key as username and value as their public SSH key
-    ```{
-      user = ssh_public_key_content
-    }```
-  EOT
+variable "key_pair_name" {
+  type        = string
+  description = "key_pair_name"
 }
 
+variable "instance_type" {
+  type        = string
+  description = "instance_type"
+}
+
+variable "instance_ami" {
+  type        = string
+  description = "instance_ami"
+}
+
+variable "s3_access_key" {
+  type        = string
+  description = "s3_access_key"
+}
+
+variable "s3_secret_key" {
+  type        = string
+  description = "s3_secret_key"
+}

@@ -1,14 +1,3 @@
-output "endpoint" {
-  value = aws_transfer_server.sftp_server.endpoint
-}
-
-output "transfer_sftp_arn" {
-  value = aws_transfer_server.sftp_server.arn
-}
-
-output "transfer_sftp_id" {
-  value = aws_transfer_server.sftp_server.id
-}
 
 output "lambda_function" {
   description = "lambda function name"
@@ -17,4 +6,9 @@ output "lambda_function" {
 output "dynamodb_table" {
   description = "dynamodb table name"
   value       = aws_dynamodb_table.sftp_data.name
+}
+
+output "public_ip" {
+  description = "description"
+  value       = aws_eip.server.public_ip
 }

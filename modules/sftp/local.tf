@@ -1,6 +1,8 @@
 locals {
 
   #Allow Put to s3 only textfiles
+  private_key_path = var.private_key_path
+  
   s3_policy  = <<POLICY
 {
   "Version": "2012-10-17",
@@ -70,21 +72,6 @@ POLICY
       "Action": "sts:AssumeRole"
     }
   ]
-}
-EOF
-
-    transfer_assume_role = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-        "Effect": "Allow",
-        "Principal": {
-            "Service": "transfer.amazonaws.com"
-        },
-        "Action": "sts:AssumeRole"
-        }
-    ]
 }
 EOF
 

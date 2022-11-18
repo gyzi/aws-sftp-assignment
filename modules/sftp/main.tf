@@ -1,4 +1,57 @@
 
+resource "aws_security_group" "sftp_sg" {
+name = "${var.bucket_name}"
+ingress {
+from_port = 22
+to_port = 22
+protocol = "tcp"
+cidr_blocks = ["0.0.0.0/0"]
+}
+egress {
+from_port = 0
+to_port = 0
+protocol = "-1"
+cidr_blocks = ["0.0.0.0/0"]
+}
+}
+# EC2 server for sftp 
+resource "aws_instance" "server" {
+  ami                         = var.instance_ami
+  instance_type               = var.instance_type
+  security_groups             = ["${var.bucket_name}"]
+  key_name                    = var.key_pair_name
+  iam_instance_profile = aws_iam_instance_profile.instance_profile.id
+  root_block_device {
+    volume_size = 15
+  }  
+  user_data            = <<EOF
+#!/bin/bash
+  sudo apt-get update
+  sudo apt-get install automake autotools-dev fuse g++ git libcurl4-gnutls-dev libfuse-dev libssl-dev libxml2-dev make pkg-config -y
+  cd /tmp/
+  git clone https://github.com/s3fs-fuse/s3fs-fuse.git
+  cd s3fs-fuse
+  ./autogen.sh
+  ./configure --prefix=/usr --with-openssl
+  make
+  sudo make install
+  which s3fs
+  sudo echo "${var.s3_access_key}:${var.s3_secret_key}" > /etc/passwd-s3fs
+  sudo chmod 640 /etc/passwd-s3fs
+  mkdir "/home/ubuntu/${var.bucket_name}"
+  chown ubuntu:ubuntu  "/home/ubuntu/${var.bucket_name}"
+
+  s3fs "${var.bucket_name}" -o use_cache=/tmp -o allow_other -o uid=1000 -o mp_umask=002 -o multireq_max=5 "/home/ubuntu/${var.bucket_name}"
+
+EOF
+
+}
+#Allocate eip to server
+resource "aws_eip" "server" {
+  vpc       = true
+  instance  = aws_instance.server.id
+}
+
 # S3 Bucket with SSE-S3 Encryption
 resource "aws_s3_bucket" "sftp_bucket" {
   bucket = var.bucket_name
@@ -12,62 +65,5 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "example" {
     }
   }
 }
-
-
-# Transfer SFTP server using Manged identiy with public key access
-resource "aws_transfer_server" "sftp_server" {
-  tags = {
-    Name = var.sftp_servername
-  }
-  security_policy_name            = "TransferSecurityPolicy-2020-06"
-  endpoint_type                   = "PUBLIC"
-  protocols                       = ["SFTP"]
-  identity_provider_type          = "SERVICE_MANAGED"
-  pre_authentication_login_banner = "Warning accessing sftp.."
-  force_destroy                   = false
-  logging_role                    = aws_iam_role.transfer_logging_s3.arn
-  # Worflow to trigger lambda on upload
-  workflow_details {
-    on_upload {
-      execution_role = aws_iam_role.transfer_lambda_role.arn
-      workflow_id    = aws_transfer_workflow.workflow.id
-    }
-  }
-}
-# trigger lambda when file upload
-resource "aws_transfer_workflow" "workflow" {
-  steps {
-    custom_step_details {
-      name                 = "lambda"
-      source_file_location = "$${original.file}"
-      target               = aws_lambda_function.lambda.arn
-      timeout_seconds      = 60
-    }
-    type = "CUSTOM"
-  }
-}
-
-# Add Users and directory access to s3 Buckett
-resource "aws_transfer_user" "this" {
-  for_each       = var.sftp_users_ssh_key
-  server_id      = aws_transfer_server.sftp_server.id
-  user_name      = each.key
-  role           = aws_iam_role.user.arn
-  home_directory = "/${aws_s3_bucket.sftp_bucket.id}/"
-  depends_on     = [aws_s3_bucket.sftp_bucket]
-}
-
-# Add user public keys
-resource "aws_transfer_ssh_key" "this" {
-  for_each   = var.sftp_users_ssh_key
-  server_id  = aws_transfer_server.sftp_server.id
-  user_name  = each.key
-  body       = each.value
-  depends_on = [aws_transfer_user.this]
-}
-
-
-
-
 
 

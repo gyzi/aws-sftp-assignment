@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "sftp_data" {
-  name           = "${aws_transfer_server.sftp_server.id}"
+  name           = "${var.bucket_name}"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5
@@ -20,11 +20,8 @@ resource "aws_dynamodb_table" "sftp_data" {
     type = "S"
   }
 
-  tags = {
-    project    = var.sftp_servername
-  }
+  depends_on = [aws_s3_bucket.sftp_bucket]
 
-  depends_on = [aws_transfer_server.sftp_server]
 }
 
 

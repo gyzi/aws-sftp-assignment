@@ -1,5 +1,5 @@
-output "sftp_endpoint" {
-  value = module.sftp.endpoint
+output "public_ip" {
+  value = module.sftp.public_ip
 }
 output "lambda_function" {
   description = "lambda function name"
