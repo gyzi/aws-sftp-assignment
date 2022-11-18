@@ -19,7 +19,7 @@ resource "aws_s3_bucket_notification" "aws-lambda-trigger" {
   }
 }
 
-resource "aws_lambda_permission" "ambda_permission" {
+resource "aws_lambda_permission" "lambda_permission" {
   statement_id  = "AllowS3Invoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda.function_name

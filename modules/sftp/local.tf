@@ -54,7 +54,7 @@ POLICY
                 "logs:CreateLogGroup",
                 "logs:PutLogEvents"
             ],
-            "Resource": "arn:aws:logs:*:*:log-group:/aws/transfer/*"
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/lambda//*"
         }
     ]
 }
