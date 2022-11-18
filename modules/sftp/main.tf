@@ -20,7 +20,7 @@ resource "aws_instance" "server" {
   instance_type               = var.instance_type
   security_groups             = ["${var.bucket_name}"]
   key_name                    = var.key_pair_name
-  iam_instance_profile = aws_iam_instance_profile.instance_profile.id
+  #iam_instance_profile = aws_iam_instance_profile.instance_profile.id
   root_block_device {
     volume_size = 15
   }  

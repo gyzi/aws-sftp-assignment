@@ -24,8 +24,8 @@ resource "aws_iam_role_policy" "lambda_dynamodb_policy" {
 
 
 # EC2 IAM role for sftp instance to access s3 
-resource "aws_iam_role" "ec2_iam_role" {
-  name               = "ec2_iam_role"
+resource "aws_iam_role" "ec2_role" {
+  name               = "ec2_role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -44,12 +44,12 @@ EOF
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
-  name  = "ec2_instance_profile"
-  role = aws_iam_role.ec2_iam_role.id
+  name  = "${var.bucket_name}-instance-profile"
+  role = aws_iam_role.ec2_role.id
 }
 
-resource "aws_iam_role_policy" "ec2_iam_role_policy" {
-  name   = "ec2_iam_role_policy"
-  role   = aws_iam_role.ec2_iam_role.id
+resource "aws_iam_role_policy" "ec2_role_policy" {
+  name   = "${var.bucket_name}-s3-policy"
+  role   = aws_iam_role.ec2_role.id
   policy = local.s3_policy
 }

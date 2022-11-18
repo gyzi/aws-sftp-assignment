@@ -30,10 +30,10 @@ This terraform module will deploy the following services:
     - least privilege deployment with IAM roles/policys
 ---
 ## Connecting to sftp
-- Use ubuntu username and private key in misc
+- Use ubuntu username and test private key shared in email
 - To access via public ip as bellow 
 '''' 
-sftp -i ./misc/test_id_rsa ubuntu@public_ip
+sftp -i PATH/test_id_rsa ubuntu@public_ip
 '''
 ## Usage Instructions
 - Add/Update inputs entries, 

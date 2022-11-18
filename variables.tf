@@ -41,3 +41,13 @@ variable "s3_secret_key" {
   type        = string
   description = "s3_secret_key"
 }
+
+variable "public_key_path" {
+  type        = string
+  description = "public_key_path"
+}
+
+variable "private_key_path" {
+  type        = string
+  description = "private_key_path"
+}
